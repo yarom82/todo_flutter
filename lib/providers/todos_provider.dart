@@ -12,7 +12,11 @@ class TodosProvider with ChangeNotifier {
   List<Todo> _todos = [];
 
   List<Todo> get todos {
-    return _todos;
+    return _todos.where((t) => !t.isDone).toList();
+  }
+
+  List<Todo> get dones {
+    return _todos.where((t) => t.isDone).toList();
   }
 
   Future<void> updateTodoStatus(Todo todo, bool newStatus) async {

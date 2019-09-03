@@ -11,7 +11,7 @@ class Counter extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10.0),
       alignment: Alignment.center,
-      child: Text('Done: $_counter', style: Theme.of(context).textTheme.title,),
+      child: Text('Remains: $_counter', style: Theme.of(context).textTheme.title,),
     );
   }
 }

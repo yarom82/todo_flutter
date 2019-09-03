@@ -52,6 +52,7 @@ class _TodoHomePageState extends State<TodoHomePage>
   Widget build(BuildContext context) {
     final todosProvider = Provider.of<TodosProvider>(context);
     final todos = todosProvider.todos;
+    final dones = todosProvider.dones;
 
     return Scaffold(
       appBar: AppBar(
@@ -70,7 +71,7 @@ class _TodoHomePageState extends State<TodoHomePage>
           controller: _tabController,
         ),
         actions: <Widget>[
-          Counter(todos != null ? todos.where((t) => t.isDone).length : 0),
+          Counter(todos.length),
         ],
       ),
       body: Builder(builder: (BuildContext context) {
@@ -81,20 +82,12 @@ class _TodoHomePageState extends State<TodoHomePage>
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
-                : TodoPage(
-                    todos != null
-                        ? todos.where((t) => !t.isDone).toList()
-                        : null,
-                    _errorCallback),
+                : TodoPage(todos, _errorCallback),
             _isLoading
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
-                : TodoPage(
-                    todos != null
-                        ? todos.where((t) => t.isDone).toList()
-                        : null,
-                    _errorCallback),
+                : TodoPage(dones, _errorCallback),
           ],
           controller: _tabController,
         );
