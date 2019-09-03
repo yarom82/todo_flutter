@@ -9,9 +9,8 @@ class TodoList extends StatelessWidget {
   final List<Todo> _todos;
   final Function _updateTodoStatus;
   final Function _deleteTodo;
-  final Function _errorCallback;
 
-  TodoList(this._todos, this._updateTodoStatus, this._deleteTodo, this._errorCallback);
+  TodoList(this._todos, this._updateTodoStatus, this._deleteTodo);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class TodoList extends StatelessWidget {
             itemBuilder: (ctx, i) {
               return ChangeNotifierProvider.value(
                 value: _todos[i],
-                child: TodoItem(_todos[i], _updateTodoStatus, _deleteTodo, _errorCallback),
+                child: TodoItem(_todos[i], _updateTodoStatus, _deleteTodo),
               );
             })
         : Container();

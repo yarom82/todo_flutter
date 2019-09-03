@@ -1,17 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../providers/todos_provider.dart';
 import '../model/todo.dart';
 
 class TodoItem extends StatelessWidget {
   final Todo _todo;
   final Function _updateTodoStatus;
   final Function _deleteTodo;
-  final Function _errorCallback;
 
-  TodoItem(this._todo, this._updateTodoStatus, this._deleteTodo, this._errorCallback);
+  TodoItem(this._todo, this._updateTodoStatus, this._deleteTodo);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,7 @@ class TodoItem extends StatelessWidget {
         try {
           _deleteTodo(_todo);
         } catch (error) {
-          _errorCallback(error);
+          throw error;
         }
       },
       child: ListTile(
@@ -43,7 +40,7 @@ class TodoItem extends StatelessWidget {
             try {
               _updateTodoStatus(_todo, value);
             } catch (error) {
-              _errorCallback(error);
+              throw error;
             }
           },
         ),

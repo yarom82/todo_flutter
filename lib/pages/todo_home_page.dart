@@ -82,12 +82,12 @@ class _TodoHomePageState extends State<TodoHomePage>
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
-                : TodoPage(todos, _updateTodoStatus, _deleteTodo, _errorCallback),
+                : TodoPage(todos, _updateTodoStatus, _deleteTodo),
             _isLoading
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
-                : TodoPage(dones, _updateTodoStatus, _deleteTodo, _errorCallback),
+                : TodoPage(dones, _updateTodoStatus, _deleteTodo),
           ],
           controller: _tabController,
         );
@@ -103,7 +103,7 @@ class _TodoHomePageState extends State<TodoHomePage>
     try {
       await Provider.of<TodosProvider>(context, listen: false).updateTodoStatus(todo, newStatus);
     } catch (error) {
-      _errorCallback(error);
+      _showError(error);
     }
   }
 
@@ -111,11 +111,11 @@ class _TodoHomePageState extends State<TodoHomePage>
     try {
       await Provider.of<TodosProvider>(context, listen: false).removeTodo(todo);
     } catch (error) {
-      _errorCallback(error);
+      _showError(error);
     }
   }
 
-  _errorCallback(String error) {
+  _showError(String error) {
     Scaffold.of(_scaffoldContext).showSnackBar(
       SnackBar(
         content: Text(error),
