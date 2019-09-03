@@ -2,6 +2,8 @@
 
 A TODO app written with [flutter](https://flutter.dev).
 
+![](todo.gif)
+
 ## Getting Started
 
 1. Clone this repo
