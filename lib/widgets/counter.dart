@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class Counter extends StatelessWidget {
@@ -7,6 +8,10 @@ class Counter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Counter $_counter');
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      alignment: Alignment.center,
+      child: Text('Done: $_counter', style: Theme.of(context).textTheme.title,),
+    );
   }
 }

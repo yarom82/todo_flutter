@@ -21,7 +21,7 @@ class TodosProvider with ChangeNotifier {
         Todo(id: todo.id, title: todo.title, isDone: newStatus);
     notifyListeners();
 
-    final todosFirebaseUrl = 'https://todoapp-6a83a.firebaseio.com/todos/${todo.id}.json33';
+    final todosFirebaseUrl = 'https://todoapp-6a83a.firebaseio.com/todos/${todo.id}.json';
     try {
       final response = await http.patch(
         todosFirebaseUrl,
@@ -36,6 +36,7 @@ class TodosProvider with ChangeNotifier {
         throw 'something went wrong.';
       }
     } catch (error) {
+      throw error;
     }
   }
 

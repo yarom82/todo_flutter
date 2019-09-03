@@ -7,9 +7,9 @@ import '../model/todo.dart';
 
 class TodoItem extends StatelessWidget {
   final Todo _todo;
-  final bool _isEnabled;
+  final Function _errorCallback;
 
-  TodoItem(this._todo, this._isEnabled);
+  TodoItem(this._todo, this._errorCallback);
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +18,16 @@ class TodoItem extends StatelessWidget {
       title: Text(_todo.title),
       leading: Checkbox(
         value: _todo.isDone,
-        onChanged: _isEnabled ? (value) => _updateTodoStatus(context, value) : null,
+        onChanged: (value) => _updateTodoStatus(context, value),
       ),
     );
   }
 
   Future _updateTodoStatus(BuildContext context, bool value) async {
-    await Provider.of<TodosProvider>(context).updateTodoStatus(_todo, value);
+    try {
+      await Provider.of<TodosProvider>(context).updateTodoStatus(_todo, value);
+    } catch (error) {
+      _errorCallback(error);
+    }
   }
 }

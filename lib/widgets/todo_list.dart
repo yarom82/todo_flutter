@@ -7,9 +7,9 @@ import '../widgets/todo_item.dart';
 
 class TodoList extends StatelessWidget {
   final List<Todo> _todos;
-  final bool _isEnabled;
+  final Function _errorCallback;
 
-  TodoList(this._todos, this._isEnabled);
+  TodoList(this._todos, this._errorCallback);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class TodoList extends StatelessWidget {
             itemBuilder: (ctx, i) {
               return ChangeNotifierProvider.value(
                 value: _todos[i],
-                child: TodoItem(_todos[i], _isEnabled),
+                child: TodoItem(_todos[i], _errorCallback),
               );
             })
         : Container();

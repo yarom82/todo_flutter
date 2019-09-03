@@ -17,9 +17,14 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Todo App',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primaryColor: Color.fromARGB(255, 44, 62, 80),
+          accentColor: Color.fromARGB(255, 60, 198, 171),
+          textTheme: TextTheme( 
+            title: TextStyle( fontSize: 16 , color: Colors.white),
+          )
         ),
         home: TodoHomePage(),
       ),

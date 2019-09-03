@@ -5,12 +5,12 @@ import '../widgets/todo_list.dart';
 
 class TodoPage extends StatelessWidget {
   final List<Todo> _todos;
+  final Function _errorCallback;
 
-  TodoPage(this._todos);
+  TodoPage(this._todos, this._errorCallback);
 
   @override
   Widget build(BuildContext context) {
-    final List<Todo> todos = _todos != null ? _todos.where((t) => !t.isDone).toList() : null;
-    return TodoList(todos, true);
+    return TodoList(_todos, _errorCallback);
   }
 }

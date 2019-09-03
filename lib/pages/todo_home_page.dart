@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 
 import 'package:http/http.dart' as http;
 
-import './done_page.dart';
 import './todo_page.dart';
 import '../model/todo.dart';
 import '../providers/todos_provider.dart';
@@ -21,19 +20,24 @@ class _TodoHomePageState extends State<TodoHomePage>
     with TickerProviderStateMixin {
   TabController _tabController;
   bool isInit = true;
+  bool _isLoading = true;
+  BuildContext _scaffoldContext;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 2, initialIndex: 0);
-    // Provider.of<TodosProvider>(context).fetchTodos();
   }
 
   @override
   void didChangeDependencies() {
     if (isInit) {
       isInit = false;
-      Provider.of<TodosProvider>(context).fetchTodos();
+      Provider.of<TodosProvider>(context).fetchTodos().then((_) =>
+        setState(() {
+          _isLoading = false;
+        })
+      );
     }
     super.didChangeDependencies();
   }
@@ -51,7 +55,7 @@ class _TodoHomePageState extends State<TodoHomePage>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Todo'),
+        title: Text('Todo App'),
         bottom: TabBar(
           tabs: <Tab>[
             Tab(
@@ -66,16 +70,35 @@ class _TodoHomePageState extends State<TodoHomePage>
           controller: _tabController,
         ),
         actions: <Widget>[
-          Counter(todos != null ? todos.length : 0),
+          Counter(todos != null ? todos.where((t) => t.isDone).length : 0),
         ],
       ),
-      body: TabBarView(
-        children: <Widget>[
-          TodoPage(todos),
-          DonePage(todos),
-        ],
-        controller: _tabController,
-      ),
+      body: Builder(builder: (BuildContext context) {
+        _scaffoldContext = context;
+        return TabBarView(
+          children: <Widget>[
+            _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : TodoPage(
+                    todos != null
+                        ? todos.where((t) => !t.isDone).toList()
+                        : null,
+                    _errorCallback),
+            _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : TodoPage(
+                    todos != null
+                        ? todos.where((t) => t.isDone).toList()
+                        : null,
+                    _errorCallback),
+          ],
+          controller: _tabController,
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: _addTodo,
@@ -83,17 +106,26 @@ class _TodoHomePageState extends State<TodoHomePage>
     );
   }
 
+  _errorCallback(String error) {
+    Scaffold.of(_scaffoldContext).showSnackBar(
+      SnackBar(
+        content: Text(error),
+        duration: new Duration(seconds: 4),
+      ),
+    );
+  }
+
   _addTodo() async {
     try {
       final dummyResponse = await http.get('https://randomuser.me/api/');
-      final extractedData = json.decode(dummyResponse.body) as Map<String, dynamic>;
-      
+      final extractedData =
+          json.decode(dummyResponse.body) as Map<String, dynamic>;
+
       Map<String, dynamic> name = extractedData['results'][0]['name'];
-      final Todo todo = Todo(title: '${name['first']} ${name['last']}', isDone: false);
+      final Todo todo =
+          Todo(title: '${name['first']} ${name['last']}', isDone: false);
 
       await Provider.of<TodosProvider>(context, listen: false).addTodo(todo);
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 }
