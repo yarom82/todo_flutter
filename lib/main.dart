@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: Color.fromARGB(255, 44, 62, 80),
           accentColor: Color.fromARGB(255, 60, 198, 171),
+          errorColor: Color.fromARGB(255, 234, 108, 106),
           textTheme: TextTheme( 
             title: TextStyle( fontSize: 16 , color: Colors.white),
           )

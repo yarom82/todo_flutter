@@ -25,7 +25,7 @@ class TodosProvider with ChangeNotifier {
         Todo(id: todo.id, title: todo.title, isDone: newStatus);
     notifyListeners();
 
-    final todosFirebaseUrl = 'https://todoapp-6a83a.firebaseio.com/todos/${todo.id}.json';
+    final String todosFirebaseUrl = 'https://todoapp-6a83a.firebaseio.com/todos/${todo.id}.json';
     try {
       final response = await http.patch(
         todosFirebaseUrl,
@@ -45,7 +45,7 @@ class TodosProvider with ChangeNotifier {
   }
 
   Future<void> fetchTodos() async {
-    final todosFirebaseUrl = 'https://todoapp-6a83a.firebaseio.com/todos.json';
+    final String todosFirebaseUrl = 'https://todoapp-6a83a.firebaseio.com/todos.json';
     try {
       final response = await http.get(todosFirebaseUrl);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -59,9 +59,9 @@ class TodosProvider with ChangeNotifier {
       throw (error);
     }
   }
-
+  
   Future<void> addTodo(Todo todo) async {
-    const todoAddFirebaseUrl =
+    const String todoAddFirebaseUrl =
         'https://todoapp-6a83a.firebaseio.com/todos.json';
     try {
       final response = await http.post(
@@ -80,6 +80,28 @@ class TodosProvider with ChangeNotifier {
 
       _todos.add(newTodo);
       notifyListeners();
+    } catch (error) {
+      print(error);
+      throw error;
+    }
+  }
+
+  Future<void> removeTodo(Todo todo) async {
+    String todoRemoveFirebaseUrl =
+        'https://todoapp-6a83a.firebaseio.com/todos/${todo.id}.json44';
+    try {
+      _todos.remove(todo);
+      notifyListeners();
+
+      final response = await http.delete(
+        todoRemoveFirebaseUrl,
+      );
+
+      if (response.statusCode >= 400) {
+        _todos.add(todo);
+        notifyListeners();
+        throw 'something went wrong.';
+      }
     } catch (error) {
       print(error);
       throw error;

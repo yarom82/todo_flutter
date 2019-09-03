@@ -82,12 +82,12 @@ class _TodoHomePageState extends State<TodoHomePage>
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
-                : TodoPage(todos, _errorCallback),
+                : TodoPage(todos, _deleteTodoCallback, _errorCallback),
             _isLoading
                 ? Center(
                     child: CircularProgressIndicator(),
                   )
-                : TodoPage(dones, _errorCallback),
+                : TodoPage(dones, _deleteTodoCallback, _errorCallback),
           ],
           controller: _tabController,
         );
@@ -97,6 +97,14 @@ class _TodoHomePageState extends State<TodoHomePage>
         onPressed: _addTodo,
       ),
     );
+  }
+
+  _deleteTodoCallback(Todo todo) async {
+    try {
+      await Provider.of<TodosProvider>(context, listen: false).removeTodo(todo);
+    } catch (error) {
+      _errorCallback(error);
+    }
   }
 
   _errorCallback(String error) {
