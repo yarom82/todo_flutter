@@ -7,10 +7,11 @@ import '../model/todo.dart';
 
 class TodoItem extends StatelessWidget {
   final Todo _todo;
-  final Function _deleteTodoCallback;
+  final Function _updateTodoStatus;
+  final Function _deleteTodo;
   final Function _errorCallback;
 
-  TodoItem(this._todo, this._deleteTodoCallback, this._errorCallback);
+  TodoItem(this._todo, this._updateTodoStatus, this._deleteTodo, this._errorCallback);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class TodoItem extends StatelessWidget {
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
         try {
-          _deleteTodoCallback(_todo);
+          _deleteTodo(_todo);
         } catch (error) {
           _errorCallback(error);
         }
@@ -38,17 +39,15 @@ class TodoItem extends StatelessWidget {
         title: Text(_todo.title),
         leading: Checkbox(
           value: _todo.isDone,
-          onChanged: (value) => _updateTodoStatus(context, value),
+          onChanged: (value) {
+            try {
+              _updateTodoStatus(_todo, value);
+            } catch (error) {
+              _errorCallback(error);
+            }
+          },
         ),
       ),
     );
-  }
-
-  Future _updateTodoStatus(BuildContext context, bool value) async {
-    try {
-      await Provider.of<TodosProvider>(context).updateTodoStatus(_todo, value);
-    } catch (error) {
-      _errorCallback(error);
-    }
   }
 }

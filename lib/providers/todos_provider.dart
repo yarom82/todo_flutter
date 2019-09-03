@@ -88,7 +88,7 @@ class TodosProvider with ChangeNotifier {
 
   Future<void> removeTodo(Todo todo) async {
     String todoRemoveFirebaseUrl =
-        'https://todoapp-6a83a.firebaseio.com/todos/${todo.id}.json44';
+        'https://todoapp-6a83a.firebaseio.com/todos/${todo.id}.json';
     try {
       _todos.remove(todo);
       notifyListeners();
